@@ -2,8 +2,14 @@
 {
     public class Author
     {
-        string FirstName { get; set; }
-        string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
+
+        public Author(string firstname, string lastname)
+        {
+            FirstName = firstname;
+            LastName = lastname;
+        }
     }
 }

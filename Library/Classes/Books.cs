@@ -4,6 +4,7 @@
     {
         public string Title { get; set; }
         public Author Author { get; set; }
+        public Genre BookGenre { get; set; }
         public enum Genre
         {
             Fiction,
@@ -12,6 +13,14 @@
             SciFi,
             Adventure,
             Mystery
+        }
+
+        public Books(string title, Author author, Genre genre)
+        {
+            Title = title;
+            Author = author;
+            BookGenre = genre;
+            
         }
     }
 }

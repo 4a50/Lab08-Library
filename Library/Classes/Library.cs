@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Library_Lab
 {
-    class Library<T> : IEnumerable
+    public class Library<T> : IEnumerable
     {
         T[] books = new T[5];
         int count { get; set; }
@@ -12,44 +12,44 @@ namespace Library_Lab
         public void Add(T book)
         {
 
-
-            for (int i = 0; i < books.Length; i++)
+            // Add to the Array if book exceeds length
+            if (count == books.Length)
             {
-                if (books[i] == null)
-                {
-                    books[i] = book;
-                    count++;
-                    break;
-                }
-                else
-                {
-
-                    // Add to the Array if book exceeds length
-                    if (count == books.Length)
-                    {
-                        Array.Resize(ref books, books.Length * 2);
-                    }
-                    books[count++] = book;
-                }
+                Array.Resize(ref books, books.Length * 2);
             }
+            books[count++] = book;
+
+
         }
-        public void Remove(T book)
+        public void Remove(int idxRemove)
         {
             //iterate through the array. until title == array[] value
             //replace the value with either a null, or shrink array while updating counter
-            for (int i = 0; i < books.Length; i++)
+
+            // B  B  B  X  R  B  
+            T[] newBooks = new T[books.Length - 1];            
+            for (int i = 0; i < newBooks.Length; i++)
             {
-                if (books[i] == book) { }
+                if (idxRemove > i) { newBooks[i] = books[i]; }
+                if (idxRemove <= i) { newBooks[i] = books[i + 1]; }                
             }
+                books = newBooks;
+
+            //IComparable() have the book class as an interface.
+            //giving an implemetation of the equals methods.
+            //or refactor or remove and look for a
 
             
+
+
             //Take the array 
             //create a NEW array with length -1 
             //iterate through the oldArray -> if Null don't add to newArray
             //oldArray = newArray.
 
-            books[count--] = book;
+            //books[count--] = book;
         }
+        
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < count; i++)
