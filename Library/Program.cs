@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Library_Lab
 {
@@ -7,8 +8,9 @@ namespace Library_Lab
         static void Main(string[] args)
         {
             Library<Books> nyPubLib = new Library<Books>();
+            List<Books> BookBag = new List<Books>();
             LoadBooks(nyPubLib);
-            UserInterface();
+            UserInterface(nyPubLib);
             //foreach (Books b in nyPubLib)
             //{
             //Console.WriteLine(b.Title);
@@ -39,7 +41,11 @@ namespace Library_Lab
                 switch (userInput)
                 {
                     case "1":
+                        Console.Clear();
+                        Console.WriteLine("Current Books Available At The Library");
+                        Console.WriteLine();
                         ViewLibrary(library);
+                        Console.ReadKey();                        
                         break;
                     case "2":
                         break;
@@ -58,18 +64,21 @@ namespace Library_Lab
                         Console.Clear();
                         break;
                 }
+                Console.Clear();
             }
         }
         static void ViewLibrary(Library<Books> lib)
         {
-            Console.WriteLine("Current Books Available At The Library");
-            Console.WriteLine();
+            
             int counter = 0;
             foreach (Books b in lib)
-            {                
-                Console.WriteLine($"{++counter} {b.Title}  {b.Author.LastName}, {b.Author.FirstName}  Genre: {b.BookGenre}");
+            {
+                Console.WriteLine($"{++counter}.  {b.Title}");
+                Console.WriteLine($"\t{b.Author.LastName}, {b.Author.FirstName}");
+                Console.WriteLine($"\t{b.BookGenre}");
             }
         }
+       
         static void LoadBooks(Library<Books> libToLoad)
         {
             libToLoad.Add(new Books("A Book", new Author("Someone", "Famous"), Books.Genre.Mystery));
