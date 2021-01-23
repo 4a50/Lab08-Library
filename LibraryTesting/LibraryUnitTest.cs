@@ -9,7 +9,7 @@ namespace LibraryTesting
         [Fact]
         public void TestIfItemIsRemovedFromList()
         {
-            Library<Books> book = new Library<Books>();
+            Library<Book> book = new Library<Book>();
 
         }
 /// <summary>
@@ -20,9 +20,16 @@ namespace LibraryTesting
         [Fact]
         public void Adding_Exsisting_Book_To_Library()
         {
-            Library<Books> testLib = new Library<Books>();
-            testLib.Add(new Books("Test Plan", new Author("Test", "Dummy"), Books.Genre.NonFiction));
-            Assert.Equal(-1, Program.AddABook(testLib, Books.Genre.NonFiction, "Test Plan", "Dummy", "Test"));
+            Library<Book> testLib = new Library<Book>();
+            testLib.Add(new Book("Test Plan", new Author("Test", "Dummy"), Book.Genre.NonFiction));
+            Assert.Equal(-1, Program.AddABook(testLib, Book.Genre.NonFiction, "Test Plan", "Dummy", "Test"));
         }
     }
 }
+/*Add a Book to your Library that exists
+Remove a book from your library
+Cannot remove a book from the library that doesn’t exist.
+Getter/Setters of your properties from your Book class
+Getter/ Setters of your properties from your Author class.
+Accurate count of books within the library
+One edge case of your choice*/

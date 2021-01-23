@@ -1,21 +1,28 @@
 ﻿namespace Library_Lab
 {
-    public class Books
+    public class Book
     {
         public string Title { get; set; }
         public Author Author { get; set; }
         public Genre BookGenre { get; set; }
         public enum Genre
         {
-            Fiction,
+            Fiction = 1,
             NonFiction,
             AutoBiography,
             SciFi,
             Adventure,
             Mystery
         }
+        //CodeReview
+        
+        public Book()
+        {
 
-        public Books(string title, Author author, Genre genre)
+        }
+        //
+        
+        public Book(string title, Author author, Genre genre)
         {
             Title = title;
             Author = author;

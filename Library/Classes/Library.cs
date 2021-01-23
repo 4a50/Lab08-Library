@@ -6,8 +6,8 @@ namespace Library_Lab
 {
     public class Library<T> : IEnumerable
     {
-        T[] books = new T[5];
-        int count { get; set; }
+        public T[] books = new T[5];
+        public int count { get; set; }
 
         public void Add(T book)
         {

@@ -5,7 +5,10 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public Author()
+        {
 
+        }
         public Author(string firstname, string lastname)
         {
             FirstName = firstname;
