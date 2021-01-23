@@ -1,5 +1,8 @@
 ﻿namespace Library_Lab
 {
+    /// <summary>
+    /// Class to store data regarding a book.
+    /// </summary>
     public class Book
     {
         public string Title { get; set; }

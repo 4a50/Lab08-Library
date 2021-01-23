@@ -17,19 +17,26 @@ namespace Library_Lab
             
 
         }
+        /// <summary>
+        /// This is the primary user interface for the program.  Executed in the Main method.
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="bookBag"></param>
         static void UserInterface(Library<Book> library, List<Book> bookBag)
         {
             bool exit = false;
             while (exit != true)
             {
-                Console.WriteLine("Welcome to The Library.  Make a selection");
-                Console.WriteLine("------------------------------------------\n");                
+                Console.WriteLine("Welcome to Phil's Library.  How will YOU expand your mind?");
+                Console.WriteLine("----------------------------------------------------------\n");                
                 Console.WriteLine("1. View All Books");
                 Console.WriteLine("2. Add A Book");
                 Console.WriteLine("3. Borrow A Book");
                 Console.WriteLine("4. Return A Book");
                 Console.WriteLine("5. View Book Bag");
-                Console.WriteLine("6. EXIT\n");                
+                Console.WriteLine("6. EXIT\n");
+                Console.WriteLine("Please make a selection");
+
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
@@ -73,6 +80,10 @@ namespace Library_Lab
                 Console.Clear();
             }
         }
+        /// <summary>
+        /// All Books contained in the library object will be displayed
+        /// </summary>
+        /// <param name="lib"></param>
         static void ViewLibrary(Library<Book> lib)
         {
             
@@ -84,6 +95,10 @@ namespace Library_Lab
                 Console.WriteLine($"\t{b.BookGenre}");
             }
         }
+        /// <summary>
+        /// This is the interface to collect the information to add a book to the library
+        /// </summary>
+        /// <param name="lib"></param>
         static void AddABookInterface(Library<Book> lib)
         {
             //TODO: Determine what to do if the book already exists.
@@ -109,12 +124,21 @@ namespace Library_Lab
             genre = (Book.Genre)Enum.ToObject(typeof(Book.Genre), genreNum);
             AddABook(lib, genre, title, authorLast, authorFirst);
         }
-
+        /// <summary>
+        /// This will take individual parameters of a book, check the Library array to determine if there is a duplicate.  If no duplicates found it will add the book 
+        /// to the library
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="genre"></param>
+        /// <param name="title"></param>
+        /// <param name="authorLast"></param>
+        /// <param name="authorFirst"></param>
+        /// <returns></returns>
         public static int AddABook(Library<Book> lib, Book.Genre genre, string title, string authorLast, string authorFirst)
         {
             foreach (Book b in lib)
             {
-                if (b.Title == title && b.Author.LastName == authorLast && b.Author.FirstName == authorFirst &&
+                if (b.Title.ToUpper() == title.ToUpper() && b.Author.LastName.ToUpper() == authorLast.ToUpper() && b.Author.FirstName.ToUpper() == authorFirst.ToUpper() &&
                     (int)b.BookGenre == (int)genre)
                 {
                     Console.WriteLine("Book Already Exists!  Returning to Main.");                   
@@ -124,7 +148,11 @@ namespace Library_Lab
             lib.Add(new Book(title, new Author(authorFirst, authorLast), genre));
             return 0;
         }
-
+        /// <summary>
+        /// This will remove a book from the BookBag and add it to the Library.
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="bookBag"></param>
         public static void ReturnABook(Library<Book> lib, List<Book> bookBag)
         {
             bool goodInput = false;
@@ -166,12 +194,25 @@ namespace Library_Lab
             lib.Add(selectBook);
             // remove the book from the BookBag via .Remove
             bookBag.Remove(selectBook);
-            
-            
+        }
 
+        /// <summary>
+        /// This will remove a book from the library and add it to the book bag.
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="bookBag"></param>
+        static void BorrowABook(Library<Book> lib, List<Book> bookBag ) {
+            //List the library items.
+            //User Chooses the appropriate selection
+            //using the idx number
+            //  add a book to the bookBag
+            //  remove the book from the library.            
         }
         
-
+        /// <summary>
+        /// View the contents of the bookbag
+        /// </summary>
+        /// <param name="bookBag"></param>
         static void ViewBookBag(List<Book> bookBag)
         {
             if (bookBag.Count == 0) { Console.WriteLine( "\nThere are no books in your bag!"); }
@@ -184,26 +225,17 @@ namespace Library_Lab
                 }
             }
         }
+        /// <summary>
+        /// Initial seed for a collection of books to add to the library.  This is not used for anything than to provide initial content
+        /// </summary>
+        /// <param name="libToLoad"></param>
         static void LoadBooks(Library<Book> libToLoad)
         {
-            libToLoad.Add(new Book("A Book", new Author("Someone", "Famous"), Book.Genre.Mystery));
-            libToLoad.Add(new Book("Another Book", new Author("S. Else", "Famoose"), Book.Genre.Adventure));
+            libToLoad.Add(new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction));
+            libToLoad.Add(new Book("Magicians, Martyrs and Madmen", new Author("Leon", "Zundinger"), Book.Genre.NonFiction));
             libToLoad.Add(new Book("Who Cut the Cheese?", new Author("Not", "Telling"), Book.Genre.Mystery));
             libToLoad.Add(new Book("An Interesting Book", new Author("John", "Boring"), Book.Genre.AutoBiography));
-            libToLoad.Add(new Book("A Brief Introduction to Dishwasher", new Author("John", "Cokos"), Book.Genre.NonFiction));
-            //Class Code Review
-            Book johnsBook = new Book()
-            {
-                Title = "Delivery Woes",
-                Author = new Author()
-                {
-                    FirstName = "John",
-                    LastName = "Cokos"
-                },
-                BookGenre = Book.Genre.Adventure
-            };
-            libToLoad.Add(johnsBook);
-            //
+            libToLoad.Add(new Book("A Brief Introduction to Dishwasher", new Author("John", "Cokos"), Book.Genre.NonFiction));            
         }
         
     }

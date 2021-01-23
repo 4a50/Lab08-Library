@@ -24,9 +24,22 @@ namespace LibraryTesting
             testLib.Add(new Book("Test Plan", new Author("Test", "Dummy"), Book.Genre.NonFiction));
             Assert.Equal(-1, Program.AddABook(testLib, Book.Genre.NonFiction, "Test Plan", "Dummy", "Test"));
         }
+        /// <summary>
+        /// Will add and remove some book to ensure an accurate count
+        /// </summary>
+        [Fact]
+        public void Accurate_Count_Of_Books_In_Library()
+        {
+            Library<Book> testLib = new Library<Book>();
+            testLib.Add(new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction));
+            testLib.Add(new Book("Magicians, Martyrs and Madmen", new Author("Leon", "Zundinger"), Book.Genre.NonFiction));
+            //TODO: Add Remove When method works
+            Assert.Equal(2, testLib.Count);
+            
+        }
     }
 }
-/*Add a Book to your Library that exists
+/*Add a Book to your Library that exists <----------------- Complete
 Remove a book from your library
 Cannot remove a book from the library that doesn’t exist.
 Getter/Setters of your properties from your Book class
