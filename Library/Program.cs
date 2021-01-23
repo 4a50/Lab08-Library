@@ -9,7 +9,9 @@ namespace Library_Lab
         {
             Library<Book> nyPubLib = new Library<Book>();
             List<Book> BookBag = new List<Book>();
-            LoadBooks(nyPubLib);            
+            LoadBooks(nyPubLib);
+            BookBag.Add(new Book("Tobin's Spirit Guide", new Author("Evo", "Shandor"), Book.Genre.NonFiction));
+            BookBag.Add(new Book("Gozer the Gozarian", new Author("Evo", "Shandor"), Book.Genre.NonFiction));
             UserInterface(nyPubLib, BookBag);
             
             
@@ -47,6 +49,9 @@ namespace Library_Lab
                     case "3":
                         break;
                     case "4":
+                        Console.Clear();
+                        ReturnABook(library, bookBag);
+
                         break;
                     case "5":
                         Console.Clear();
@@ -131,7 +136,7 @@ namespace Library_Lab
             //Choose a number.
             while (goodInput == false)
             {
-                Console.WriteLine("Select A Book To Return to the Library");
+                Console.WriteLine("\nSelect A Book To Return to the Library");
                 try {
                     string userInput = Console.ReadLine();
                     idx = int.Parse(userInput) - 1;
