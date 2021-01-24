@@ -54,8 +54,13 @@ namespace LibraryTesting
             Library<Book> testLib = new Library<Book>();
             testLib.Add(new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction));
             testLib.Add(new Book("Magicians, Martyrs and Madmen", new Author("Leon", "Zundinger"), Book.Genre.NonFiction));
+            testLib.Add(new Book("Who Cut the Cheese?", new Author("Not", "Telling"), Book.Genre.Mystery));
+            testLib.Add(new Book("An Interesting Book", new Author("John", "Boring"), Book.Genre.AutoBiography));
+            testLib.Add(new Book("A Brief Introduction to Dishwasher", new Author("John", "Cokos"), Book.Genre.NonFiction));
+            testLib.Remove(0);
+            testLib.Remove(0);
             //TODO: Add Remove When method works
-            Assert.Equal(2, testLib.Count);
+            Assert.Equal(3, testLib.Count);
             
         }
         [Fact]
@@ -90,13 +95,33 @@ namespace LibraryTesting
             Book book = new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction);
             Assert.Equal(2, (int)book.BookGenre);
         }
+        [Fact]
+        public void Test_Use_Of_Property_FirstName_In_Author()
+        {
+            Author author = new Author("John Horace", "Tobin");
+            Assert.Equal("John Horace", author.FirstName);
+        }
+        [Fact]
+        public void Test_Use_Of_Property_Last_Name_In_Author()
+        {
+            Author author = new Author("John Horace", "Tobin");
+            Assert.Equal("Tobin", author.LastName);
+        }
+        [Fact]
+        public void Test_If_Blank_Input_When_Adding_Title()
+        {
+            Library<Book> testLib = new Library<Book>();
+            Assert.Equal(-1, Program.AddABook(testLib, Book.Genre.Adventure, "", "Mouse", "Mickey"));
+        }
+
 
     }
 }
 /*Add a Book to your Library that exists <----------------- Complete
 Remove a book from your library  <------------------------- Complete
 Cannot remove a book from the library that doesn’t exist. < Complete
-Getter/Setters of your properties from your Book class
-Getter/ Setters of your properties from your Author class.
-Accurate count of books within the library
-One edge case of your choice*/
+Getter/Setters of your properties from your Book class <--- Complete
+Getter/ Setters of your properties from your Author class.< Complete
+Accurate count of books within the library <--------------- Complete
+One edge case of your choice
+*/

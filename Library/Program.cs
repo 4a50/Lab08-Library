@@ -52,6 +52,7 @@ namespace Library_Lab
                         Console.WriteLine("Add A Book");
                         Console.WriteLine();
                         AddABookInterface(library);
+                        Console.ReadKey();
                         break;
                     case "3":
                         bool correctEntry = false;
@@ -120,7 +121,6 @@ namespace Library_Lab
             string authorFirst = Console.ReadLine();
             Console.WriteLine("Please Choose From the following Genres");
 
-
             foreach (Object value in Enum.GetValues(typeof(Book.Genre)))
             {
                 Console.WriteLine($"{++counter}. {(Book.Genre)value}");
@@ -128,7 +128,12 @@ namespace Library_Lab
             Console.WriteLine();
             string userGenre = Console.ReadLine();
             int.TryParse(userGenre, out int genreNum);
-            //Get hash code another way to transfer the int to the enum?
+            if (genreNum > counter || genreNum < 1)
+            {
+                Console.WriteLine("Invalid Genre Entry. Returning to Main");
+                Console.WriteLine("Press Any Key");
+                return;
+            }
             genre = (Book.Genre)Enum.ToObject(typeof(Book.Genre), genreNum);
             AddABook(lib, genre, title, authorLast, authorFirst);
         }
@@ -144,16 +149,36 @@ namespace Library_Lab
         /// <returns></returns>
         public static int AddABook(Library<Book> lib, Book.Genre genre, string title, string authorLast, string authorFirst)
         {
+            int badInput = 0;
+            if (title == "") { Console.WriteLine("No Title Entered");
+                badInput = -1;
+            }
+            if (authorLast == "")
+            {
+                Console.WriteLine("No Author Last Name Entered");
+                badInput = -1;
+            }
+            if (authorFirst == "")
+            {
+                Console.WriteLine("No Author First Name Entered");
+                badInput = -1;
+            }
             foreach (Book b in lib)
             {
                 if (b.Title.ToUpper() == title.ToUpper() && b.Author.LastName.ToUpper() == authorLast.ToUpper() && b.Author.FirstName.ToUpper() == authorFirst.ToUpper() &&
                     (int)b.BookGenre == (int)genre)
                 {
                     Console.WriteLine("Book Already Exists!  Returning to Main.");
-                    Console.ReadKey();
-                    return -1;
+                    badInput = -1;
+                    break;
                 }
             }
+            if (badInput == -1) {
+                Console.WriteLine("Press a key to return to Main Menu");                
+                return badInput;
+            }
+            else {Console.WriteLine($"{title} added to the library");}
+
             lib.Add(new Book(title, new Author(authorFirst, authorLast), genre));
             return 0;
         }
