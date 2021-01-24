@@ -54,7 +54,15 @@ namespace Library_Lab
                         AddABookInterface(library);
                         break;
                     case "3":
-                        break;
+                        bool correctEntry = false;
+                        while (correctEntry == false)
+                        {
+                        Console.Clear();
+                            correctEntry = BorrowBookInterface(library, bookBag);
+                            //if (correctEntry == false) Console.WriteLine("Invalid Entry.  Please try again.");
+                            Console.ReadKey();
+                        }
+                            break;
                     case "4":
                         Console.Clear();
                         ReturnABook(library, bookBag);
@@ -101,7 +109,7 @@ namespace Library_Lab
         /// <param name="lib"></param>
         static void AddABookInterface(Library<Book> lib)
         {
-            //TODO: Determine what to do if the book already exists.
+            
             int counter = 0;
             Book.Genre genre;
             Console.Write("Title: ");
@@ -141,7 +149,8 @@ namespace Library_Lab
                 if (b.Title.ToUpper() == title.ToUpper() && b.Author.LastName.ToUpper() == authorLast.ToUpper() && b.Author.FirstName.ToUpper() == authorFirst.ToUpper() &&
                     (int)b.BookGenre == (int)genre)
                 {
-                    Console.WriteLine("Book Already Exists!  Returning to Main.");                   
+                    Console.WriteLine("Book Already Exists!  Returning to Main.");
+                    Console.ReadKey();
                     return -1;
                 }
             }
@@ -201,12 +210,37 @@ namespace Library_Lab
         /// </summary>
         /// <param name="lib"></param>
         /// <param name="bookBag"></param>
-        static void BorrowABook(Library<Book> lib, List<Book> bookBag ) {
+        public static bool BorrowBookInterface(Library<Book> lib, List<Book> bookBag)
+        {
             //List the library items.
+            ViewLibrary(lib);
+            Console.WriteLine("Please select a book to borrow\n");
+            string userInput = Console.ReadLine();
+            return BorrowABook(lib, bookBag, userInput);
+            
+        }
+        
+        public static bool BorrowABook(Library<Book> lib, List<Book> bookBag, string userInput ) {
+            bool correctEntry = false;
+            int userNum = 0;            
+            
             //User Chooses the appropriate selection
-            //using the idx number
-            //  add a book to the bookBag
-            //  remove the book from the library.            
+            correctEntry = int.TryParse(userInput, out userNum);
+            // Determine is userInput can be parsed to an int.
+            if (!correctEntry) {
+                Console.WriteLine("Invalid Entry, please select a valid number");
+                return correctEntry; 
+            }
+            //Determine if it is in the appropriate range.
+            if (userNum > lib.Count || userNum < 1) 
+            {
+                Console.WriteLine("Invalid Entry. Please select a number in range");
+                return false;
+            }
+            bookBag.Add(lib.Books[userNum - 1]);
+            lib.Remove(userNum - 1);
+            Console.WriteLine("Book checked out!");            
+            return correctEntry;
         }
         
         /// <summary>
@@ -229,7 +263,7 @@ namespace Library_Lab
         /// Initial seed for a collection of books to add to the library.  This is not used for anything than to provide initial content
         /// </summary>
         /// <param name="libToLoad"></param>
-        static void LoadBooks(Library<Book> libToLoad)
+        public static void LoadBooks(Library<Book> libToLoad)
         {
             libToLoad.Add(new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction));
             libToLoad.Add(new Book("Magicians, Martyrs and Madmen", new Author("Leon", "Zundinger"), Book.Genre.NonFiction));

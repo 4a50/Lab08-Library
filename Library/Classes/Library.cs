@@ -32,6 +32,7 @@ namespace Library_Lab
                 if (idxRemove <= i) { newBooks[i] = Books[i + 1]; }                
             }
                 Books = newBooks;
+            Count = newBooks.Length;
 
             //IComparable() have the book class as an interface.
             //giving an implementation of the equals methods.
