@@ -12,11 +12,11 @@ namespace LibraryTesting
             Library<Book> book = new Library<Book>();
 
         }
-/// <summary>
-/// This is adding a book, trying to add the SAME book through the method.  Expecting a return
-/// of -1 for book already exists.
-/// </summary>
-/// 
+        /// <summary>
+        /// This is adding a book, trying to add the SAME book through the method.  Expecting a return
+        /// of -1 for book already exists.
+        /// </summary>
+        /// 
         [Fact]
         public void Adding_Exsisting_Book_To_Library()
         {

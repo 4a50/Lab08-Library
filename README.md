@@ -19,4 +19,5 @@ with a library.
 ## Architecture
 Utilizes Generic Class and List manipulation to utilize the data.
 
+![UML Diagram](./assets/UML_Lab08.png)
 ## Change Log
