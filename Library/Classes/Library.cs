@@ -6,20 +6,18 @@ namespace Library_Lab
 {
     public class Library<T> : IEnumerable
     {
-        T[] books = new T[5];
-        int count { get; set; }
+        public T[] Books = new T[5];
+        public int Count { get; set; }
 
         public void Add(T book)
         {
 
             // Add to the Array if book exceeds length
-            if (count == books.Length)
+            if (Count == Books.Length)
             {
-                Array.Resize(ref books, books.Length * 2);
+                Array.Resize(ref Books, Books.Length * 2);
             }
-            books[count++] = book;
-
-
+            Books[Count++] = book;
         }
         public void Remove(int idxRemove)
         {
@@ -27,17 +25,18 @@ namespace Library_Lab
             //replace the value with either a null, or shrink array while updating counter
 
             // B  B  B  X  R  B  
-            T[] newBooks = new T[books.Length - 1];            
+            T[] newBooks = new T[Books.Length - 1];            
             for (int i = 0; i < newBooks.Length; i++)
             {
-                if (idxRemove > i) { newBooks[i] = books[i]; }
-                if (idxRemove <= i) { newBooks[i] = books[i + 1]; }                
+                if (idxRemove > i) { newBooks[i] = Books[i]; }
+                if (idxRemove <= i) { newBooks[i] = Books[i + 1]; }                
             }
-                books = newBooks;
+                Books = newBooks;
+            Count = newBooks.Length;
 
             //IComparable() have the book class as an interface.
-            //giving an implemetation of the equals methods.
-            //or refactor or remove and look for a
+            //giving an implementation of the equals methods.
+            //or re-factor or remove and look for a
 
             
 
@@ -48,13 +47,12 @@ namespace Library_Lab
             //oldArray = newArray.
 
             //books[count--] = book;
-        }
-        
+        }       
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                yield return books[i];
+                yield return Books[i];
             }
         }
 

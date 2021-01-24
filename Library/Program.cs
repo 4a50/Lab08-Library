@@ -7,36 +7,36 @@ namespace Library_Lab
     {
         static void Main(string[] args)
         {
-            Library<Books> nyPubLib = new Library<Books>();
-            List<Books> BookBag = new List<Books>();
+            Library<Book> nyPubLib = new Library<Book>();
+            List<Book> BookBag = new List<Book>();
             LoadBooks(nyPubLib);
-            UserInterface(nyPubLib);
-            //foreach (Books b in nyPubLib)
-            //{
-            //Console.WriteLine(b.Title);
-            //}
-            //nyPubLib.Remove(3);
-            //foreach (Books b in nyPubLib)
-            //{
-            //    Console.WriteLine(b.Title);
-            //}
+            BookBag.Add(new Book("Tobin's Spirit Guide", new Author("Evo", "Shandor"), Book.Genre.NonFiction));
+            BookBag.Add(new Book("Gozer the Gozarian", new Author("Evo", "Shandor"), Book.Genre.NonFiction));
+            UserInterface(nyPubLib, BookBag);
+            
+            
 
         }
-        static void UserInterface(Library<Books> library)
+        /// <summary>
+        /// This is the primary user interface for the program.  Executed in the Main method.
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="bookBag"></param>
+        static void UserInterface(Library<Book> library, List<Book> bookBag)
         {
             bool exit = false;
             while (exit != true)
             {
-                Console.WriteLine("Welcome to The Library.  Make a selection");
-                Console.WriteLine("------------------------------------------");
-                Console.WriteLine();
+                Console.WriteLine("Welcome to Phil's Library.  How will YOU expand your mind?");
+                Console.WriteLine("----------------------------------------------------------\n");                
                 Console.WriteLine("1. View All Books");
                 Console.WriteLine("2. Add A Book");
                 Console.WriteLine("3. Borrow A Book");
                 Console.WriteLine("4. Return A Book");
                 Console.WriteLine("5. View Book Bag");
-                Console.WriteLine("6. EXIT");
-                Console.WriteLine();
+                Console.WriteLine("6. EXIT\n");
+                Console.WriteLine("Please make a selection");
+
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
@@ -52,12 +52,30 @@ namespace Library_Lab
                         Console.WriteLine("Add A Book");
                         Console.WriteLine();
                         AddABookInterface(library);
+                        Console.ReadKey();
                         break;
                     case "3":
-                        break;
+                        bool correctEntry = false;
+                        while (correctEntry == false)
+                        {
+                        Console.Clear();
+                            correctEntry = BorrowBookInterface(library, bookBag);
+                            //if (correctEntry == false) Console.WriteLine("Invalid Entry.  Please try again.");
+                            Console.ReadKey();
+                        }
+                            break;
                     case "4":
+                        Console.Clear();
+                        ReturnABook(library, bookBag);
+
                         break;
                     case "5":
+                        Console.Clear();
+                        Console.WriteLine("The Following Books are in your BookBag");
+                        Console.WriteLine("---------------------------------------");
+                        ViewBookBag(bookBag);
+                        Console.WriteLine("\n\nPress Any Key to Return To Main");
+                        Console.ReadKey();
                         break;
                     case "6":
                         exit = true;
@@ -71,22 +89,30 @@ namespace Library_Lab
                 Console.Clear();
             }
         }
-        static void ViewLibrary(Library<Books> lib)
+        /// <summary>
+        /// All Books contained in the library object will be displayed
+        /// </summary>
+        /// <param name="lib"></param>
+        static void ViewLibrary(Library<Book> lib)
         {
             
             int counter = 0;
-            foreach (Books b in lib)
+            foreach (Book b in lib)
             {
                 Console.WriteLine($"{++counter}.  {b.Title}");
                 Console.WriteLine($"\t{b.Author.LastName}, {b.Author.FirstName}");
                 Console.WriteLine($"\t{b.BookGenre}");
             }
         }
-        static void AddABookInterface(Library<Books> lib)
+        /// <summary>
+        /// This is the interface to collect the information to add a book to the library
+        /// </summary>
+        /// <param name="lib"></param>
+        static void AddABookInterface(Library<Book> lib)
         {
-            //TODO: Determine what to do if the book already exsists.
+            
             int counter = 0;
-            Books.Genre genre;
+            Book.Genre genre;
             Console.Write("Title: ");
             string title = Console.ReadLine();
             Console.Write("Author Last Name: ");
@@ -95,44 +121,181 @@ namespace Library_Lab
             string authorFirst = Console.ReadLine();
             Console.WriteLine("Please Choose From the following Genres");
 
-
-            foreach (Object value in Enum.GetValues(typeof(Books.Genre)))
+            foreach (Object value in Enum.GetValues(typeof(Book.Genre)))
             {
-                Console.WriteLine($"{++counter}. {(Books.Genre)value}");
+                Console.WriteLine($"{++counter}. {(Book.Genre)value}");
             }
             Console.WriteLine();
             string userGenre = Console.ReadLine();
             int.TryParse(userGenre, out int genreNum);
-            genre = (Books.Genre)Enum.ToObject(typeof(Books.Genre), --genreNum);
+            if (genreNum > counter || genreNum < 1)
+            {
+                Console.WriteLine("Invalid Genre Entry. Returning to Main");
+                Console.WriteLine("Press Any Key");
+                return;
+            }
+            genre = (Book.Genre)Enum.ToObject(typeof(Book.Genre), genreNum);
             AddABook(lib, genre, title, authorLast, authorFirst);
         }
-
-        public static int AddABook(Library<Books> lib, Books.Genre genre, string title, string authorLast, string authorFirst)
+        /// <summary>
+        /// This will take individual parameters of a book, check the Library array to determine if there is a duplicate.  If no duplicates found it will add the book 
+        /// to the library
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="genre"></param>
+        /// <param name="title"></param>
+        /// <param name="authorLast"></param>
+        /// <param name="authorFirst"></param>
+        /// <returns></returns>
+        public static int AddABook(Library<Book> lib, Book.Genre genre, string title, string authorLast, string authorFirst)
         {
-            foreach (Books b in lib)
+            int badInput = 0;
+            if (title == "") { Console.WriteLine("No Title Entered");
+                badInput = -1;
+            }
+            if (authorLast == "")
             {
-                if (b.Title == title && b.Author.LastName == authorLast && b.Author.FirstName == authorFirst &&
+                Console.WriteLine("No Author Last Name Entered");
+                badInput = -1;
+            }
+            if (authorFirst == "")
+            {
+                Console.WriteLine("No Author First Name Entered");
+                badInput = -1;
+            }
+            foreach (Book b in lib)
+            {
+                if (b.Title.ToUpper() == title.ToUpper() && b.Author.LastName.ToUpper() == authorLast.ToUpper() && b.Author.FirstName.ToUpper() == authorFirst.ToUpper() &&
                     (int)b.BookGenre == (int)genre)
                 {
-                    Console.WriteLine("Book Already Exists!  Returning to Main.");                   
-                    return -1;
+                    Console.WriteLine("Book Already Exists!  Returning to Main.");
+                    badInput = -1;
+                    break;
                 }
             }
-            lib.Add(new Books(title, new Author(authorFirst, authorLast), genre));
+            if (badInput == -1) {
+                Console.WriteLine("Press a key to return to Main Menu");                
+                return badInput;
+            }
+            else {Console.WriteLine($"{title} added to the library");}
+
+            lib.Add(new Book(title, new Author(authorFirst, authorLast), genre));
             return 0;
         }
-
-        static void LoadBooks(Library<Books> libToLoad)
+        /// <summary>
+        /// This will remove a book from the BookBag and add it to the Library.
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="bookBag"></param>
+        public static void ReturnABook(Library<Book> lib, List<Book> bookBag)
         {
-            libToLoad.Add(new Books("A Book", new Author("Someone", "Famous"), Books.Genre.Mystery));
-            libToLoad.Add(new Books("Another Book", new Author("S. Else0", "Famoose"), Books.Genre.Adventure));
-            libToLoad.Add(new Books("Who Cut the Cheese?", new Author("Not", "Telling"), Books.Genre.Mystery));
-            libToLoad.Add(new Books("An Interesting Book", new Author("John", "Boring"), Books.Genre.AutoBiography));
-            libToLoad.Add(new Books("A Brief Introduction to Dishwasher", new Author("John", "Cokos"), Books.Genre.NonFiction));
+            bool goodInput = false;
+            int counter = 0;
+            int idx = 0;
+            Book selectBook = new Book();
+            //View Book bag
+            ViewBookBag(bookBag);            
+            //Choose a number.
+            while (goodInput == false)
+            {
+                Console.WriteLine("\nSelect A Book To Return to the Library");
+                try {
+                    string userInput = Console.ReadLine();
+                    idx = int.Parse(userInput) - 1;
+                    goodInput = true;
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid Entry.  Please try again.");
+                    Console.ReadKey();
+                }
+
+            }
+            //iterate
+            foreach (Book b in bookBag)
+            // when counter + 1 = number chosen.  
+            //  set the book to a var
+            //  break the loop
+            {
+                if (counter == idx)
+                {
+                    selectBook = b;
+                    break;
+                }
+                counter++;
+            }
+            // using the counter run the add book to library.
+            lib.Add(selectBook);
+            // remove the book from the BookBag via .Remove
+            bookBag.Remove(selectBook);
         }
 
-
-
-
+        /// <summary>
+        /// This will remove a book from the library and add it to the book bag.
+        /// </summary>
+        /// <param name="lib"></param>
+        /// <param name="bookBag"></param>
+        public static bool BorrowBookInterface(Library<Book> lib, List<Book> bookBag)
+        {
+            //List the library items.
+            ViewLibrary(lib);
+            Console.WriteLine("Please select a book to borrow\n");
+            string userInput = Console.ReadLine();
+            return BorrowABook(lib, bookBag, userInput);
+            
+        }
+        
+        public static bool BorrowABook(Library<Book> lib, List<Book> bookBag, string userInput ) {
+            bool correctEntry = false;
+            int userNum = 0;            
+            
+            //User Chooses the appropriate selection
+            correctEntry = int.TryParse(userInput, out userNum);
+            // Determine is userInput can be parsed to an int.
+            if (!correctEntry) {
+                Console.WriteLine("Invalid Entry, please select a valid number");
+                return correctEntry; 
+            }
+            //Determine if it is in the appropriate range.
+            if (userNum > lib.Count || userNum < 1) 
+            {
+                Console.WriteLine("Invalid Entry. Please select a number in range");
+                return false;
+            }
+            bookBag.Add(lib.Books[userNum - 1]);
+            lib.Remove(userNum - 1);
+            Console.WriteLine("Book checked out!");            
+            return correctEntry;
+        }
+        
+        /// <summary>
+        /// View the contents of the bookbag
+        /// </summary>
+        /// <param name="bookBag"></param>
+        static void ViewBookBag(List<Book> bookBag)
+        {
+            if (bookBag.Count == 0) { Console.WriteLine( "\nThere are no books in your bag!"); }
+            else
+            {
+                int counter = 0;
+                foreach (Book b in bookBag)
+                {                    
+                    Console.WriteLine($"{++counter}.  {b.Title}");
+                }
+            }
+        }
+        /// <summary>
+        /// Initial seed for a collection of books to add to the library.  This is not used for anything than to provide initial content
+        /// </summary>
+        /// <param name="libToLoad"></param>
+        public static void LoadBooks(Library<Book> libToLoad)
+        {
+            libToLoad.Add(new Book("Tobin's Spirit Guide", new Author("John Horace", "Tobin"), Book.Genre.NonFiction));
+            libToLoad.Add(new Book("Magicians, Martyrs and Madmen", new Author("Leon", "Zundinger"), Book.Genre.NonFiction));
+            libToLoad.Add(new Book("Who Cut the Cheese?", new Author("Not", "Telling"), Book.Genre.Mystery));
+            libToLoad.Add(new Book("An Interesting Book", new Author("John", "Boring"), Book.Genre.AutoBiography));
+            libToLoad.Add(new Book("A Brief Introduction to Dishwasher", new Author("John", "Cokos"), Book.Genre.NonFiction));            
+        }
+        
     }
 }
